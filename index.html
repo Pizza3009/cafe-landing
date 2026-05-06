@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brew & Co. — 커피 한 잔의 여유</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brown-dark:  #3b1f0e;
+      --brown:       #6f3d1e;
+      --brown-light: #c8956c;
+      --cream:       #fdf6ee;
+      --cream-dark:  #f0e0c8;
+      --text:        #2c1a0e;
+      --gray:        #7a6a5a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Georgia', serif;
+      background: var(--cream);
+      color: var(--text);
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      background: rgba(59,31,14,0.95);
+      backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 6vw; height: 64px;
+    }
+    nav .logo { font-size: 1.4rem; color: var(--cream); letter-spacing: .1em; font-weight: bold; }
+    nav ul { list-style: none; display: flex; gap: 2rem; }
+    nav ul a { color: var(--cream-dark); text-decoration: none; font-size: .95rem; transition: color .2s; }
+    nav ul a:hover { color: var(--brown-light); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      background:
+        linear-gradient(to bottom, rgba(59,31,14,.55) 0%, rgba(59,31,14,.15) 60%, var(--cream) 100%),
+        url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1600&q=80') center/cover no-repeat;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 0 1rem;
+    }
+    #hero h1 { font-size: clamp(2.4rem, 6vw, 5rem); color: #fff; line-height: 1.2; text-shadow: 0 2px 12px rgba(0,0,0,.4); }
+    #hero p  { margin-top: 1.2rem; font-size: clamp(1rem, 2.2vw, 1.35rem); color: var(--cream-dark); max-width: 520px; line-height: 1.7; }
+    #hero .btn {
+      margin-top: 2.4rem;
+      display: inline-block; padding: .85rem 2.4rem;
+      background: var(--brown-light); color: #fff;
+      border-radius: 40px; text-decoration: none;
+      font-size: 1rem; letter-spacing: .06em;
+      transition: background .25s, transform .2s;
+    }
+    #hero .btn:hover { background: var(--brown); transform: translateY(-2px); }
+
+    /* ── SECTION BASE ── */
+    section { padding: 6rem 6vw; }
+    .section-label { font-size: .8rem; letter-spacing: .2em; text-transform: uppercase; color: var(--brown-light); margin-bottom: .6rem; }
+    .section-title  { font-size: clamp(1.8rem, 3.5vw, 2.8rem); color: var(--brown-dark); margin-bottom: 1rem; }
+    .section-sub    { color: var(--gray); line-height: 1.8; max-width: 560px; }
+
+    /* ── ABOUT ── */
+    #about { background: var(--cream); }
+    #about .inner { display: flex; gap: 5vw; align-items: center; flex-wrap: wrap; }
+    #about .text  { flex: 1 1 300px; }
+    #about img    { flex: 1 1 300px; width: 100%; max-width: 480px; border-radius: 16px; object-fit: cover; height: 340px; box-shadow: 0 8px 32px rgba(111,61,30,.18); }
+
+    /* ── MENU ── */
+    #menu { background: var(--cream-dark); }
+    #menu .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.6rem; margin-top: 3rem; }
+    .menu-card {
+      background: var(--cream); border-radius: 16px; overflow: hidden;
+      box-shadow: 0 4px 18px rgba(111,61,30,.10);
+      transition: transform .25s, box-shadow .25s;
+    }
+    .menu-card:hover { transform: translateY(-6px); box-shadow: 0 10px 30px rgba(111,61,30,.18); }
+    .menu-card img   { width: 100%; height: 180px; object-fit: cover; }
+    .menu-card .info { padding: 1.1rem 1.2rem 1.4rem; }
+    .menu-card h3    { font-size: 1.05rem; color: var(--brown-dark); }
+    .menu-card p     { font-size: .88rem; color: var(--gray); margin-top: .35rem; line-height: 1.6; }
+    .menu-card .price{ display: inline-block; margin-top: .7rem; font-size: .95rem; color: var(--brown); font-weight: bold; }
+
+    /* ── FEATURES ── */
+    #features { background: var(--brown-dark); color: var(--cream); }
+    #features .section-title { color: var(--cream); }
+    #features .section-sub   { color: var(--cream-dark); }
+    #features .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 2rem; margin-top: 3rem; }
+    .feat-card { text-align: center; }
+    .feat-card .icon { font-size: 2.6rem; margin-bottom: .8rem; }
+    .feat-card h3 { font-size: 1.05rem; color: var(--brown-light); margin-bottom: .4rem; }
+    .feat-card p  { font-size: .88rem; color: var(--cream-dark); line-height: 1.7; }
+
+    /* ── HOURS ── */
+    #hours { background: var(--cream); text-align: center; }
+    #hours table { margin: 2.5rem auto 0; border-collapse: collapse; min-width: 300px; }
+    #hours td, #hours th { padding: .65rem 1.5rem; }
+    #hours th { color: var(--brown-light); font-size: .82rem; letter-spacing: .1em; text-transform: uppercase; }
+    #hours tr:nth-child(even) td { background: var(--cream-dark); }
+    #hours .closed { color: #c0392b; font-weight: bold; }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--cream-dark); }
+    #contact .inner { display: flex; gap: 5vw; flex-wrap: wrap; align-items: flex-start; }
+    #contact .info  { flex: 1 1 260px; line-height: 2; color: var(--gray); }
+    #contact .info strong { color: var(--brown-dark); display: block; margin-top: .5rem; }
+    #contact form   { flex: 1 1 300px; display: flex; flex-direction: column; gap: 1rem; }
+    #contact input, #contact textarea {
+      padding: .8rem 1rem; border: 1.5px solid var(--cream-dark);
+      border-radius: 10px; font-size: .95rem; background: var(--cream);
+      outline: none; transition: border-color .2s;
+    }
+    #contact input:focus, #contact textarea:focus { border-color: var(--brown-light); }
+    #contact textarea { min-height: 120px; resize: vertical; }
+    #contact button {
+      padding: .85rem; background: var(--brown); color: #fff;
+      border: none; border-radius: 10px; font-size: 1rem;
+      cursor: pointer; transition: background .2s;
+    }
+    #contact button:hover { background: var(--brown-dark); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--brown-dark); color: var(--cream-dark);
+      text-align: center; padding: 2rem 1rem; font-size: .88rem; line-height: 1.9;
+    }
+    footer a { color: var(--brown-light); text-decoration: none; }
+
+    @media (max-width: 600px) {
+      nav ul { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="logo">☕ Brew &amp; Co.</span>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#hours">Hours</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <h1>커피 한 잔의<br>완벽한 여유</h1>
+  <p>엄선된 원두로 내린 스페셜티 커피와<br>따뜻한 공간이 당신을 기다립니다.</p>
+  <a href="#menu" class="btn">메뉴 보기</a>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="inner">
+    <div class="text">
+      <p class="section-label">Our Story</p>
+      <h2 class="section-title">좋은 커피는<br>좋은 하루를 만듭니다</h2>
+      <p class="section-sub">2015년 서울 마포구의 작은 골목에서 시작한 Brew &amp; Co.는 단 한 가지 철학으로 성장해왔습니다. <em>최고의 원두, 최고의 로스팅, 최고의 한 잔.</em> 바리스타 챔피언십 수상 경력의 로스터가 직접 선별한 싱글 오리진 원두를 매일 신선하게 로스팅합니다.</p>
+    </div>
+    <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&q=80" alt="카페 내부" />
+  </div>
+</section>
+
+<!-- MENU -->
+<section id="menu">
+  <p class="section-label">Our Menu</p>
+  <h2 class="section-title">시그니처 메뉴</h2>
+  <div class="grid">
+    <div class="menu-card">
+      <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=80" alt="에스프레소" />
+      <div class="info">
+        <h3>시그니처 에스프레소</h3>
+        <p>에티오피아 예가체프 원두로 내린 밸런스 좋은 에스프레소</p>
+        <span class="price">₩4,500</span>
+      </div>
+    </div>
+    <div class="menu-card">
+      <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&q=80" alt="라떼" />
+      <div class="info">
+        <h3>시그니처 라떼</h3>
+        <p>부드러운 마이크로폼 우유와 진한 에스프레소의 조화</p>
+        <span class="price">₩5,800</span>
+      </div>
+    </div>
+    <div class="menu-card">
+      <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80" alt="핸드드립" />
+      <div class="info">
+        <h3>핸드드립 커피</h3>
+        <p>V60 드리퍼로 한 방울 한 방울 정성껏 내린 스페셜티 드립</p>
+        <span class="price">₩6,500</span>
+      </div>
+    </div>
+    <div class="menu-card">
+      <img src="https://images.unsplash.com/photo-1568649929103-28ffbefaca1e?w=600&q=80" alt="콜드브루" />
+      <div class="info">
+        <h3>콜드브루</h3>
+        <p>12시간 저온 추출로 만든 깊고 부드러운 콜드브루</p>
+        <span class="price">₩6,000</span>
+      </div>
+    </div>
+    <div class="menu-card">
+      <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=600&q=80" alt="크루아상" />
+      <div class="info">
+        <h3>버터 크루아상</h3>
+        <p>매일 아침 직접 구운 바삭하고 촉촉한 프렌치 크루아상</p>
+        <span class="price">₩3,800</span>
+      </div>
+    </div>
+    <div class="menu-card">
+      <img src="https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=600&q=80" alt="티라미수" />
+      <div class="info">
+        <h3>티라미수</h3>
+        <p>이탈리아 정통 레시피로 만든 진한 마스카포네 티라미수</p>
+        <span class="price">₩7,500</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <p class="section-label">Why Us</p>
+  <h2 class="section-title">Brew &amp; Co.를 선택하는 이유</h2>
+  <p class="section-sub">단순한 카페가 아닌, 일상의 쉼표가 되는 공간을 만들기 위해 노력합니다.</p>
+  <div class="cards">
+    <div class="feat-card">
+      <div class="icon">🌱</div>
+      <h3>스페셜티 원두</h3>
+      <p>SCA 기준 80점 이상의 스페셜티 원두만을 엄선하여 직접 로스팅합니다.</p>
+    </div>
+    <div class="feat-card">
+      <div class="icon">👨‍🍳</div>
+      <h3>전문 바리스타</h3>
+      <p>국내외 바리스타 챔피언십 수상 경력의 바리스타가 한 잔 한 잔 정성껏 추출합니다.</p>
+    </div>
+    <div class="feat-card">
+      <div class="icon">🛋️</div>
+      <h3>편안한 공간</h3>
+      <p>오래 머물고 싶은 아늑한 인테리어와 넉넉한 좌석으로 편안함을 제공합니다.</p>
+    </div>
+    <div class="feat-card">
+      <div class="icon">🌿</div>
+      <h3>친환경 실천</h3>
+      <p>생분해 컵과 텀블러 할인으로 지구와 함께하는 커피 문화를 만들어갑니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOURS -->
+<section id="hours">
+  <p class="section-label">Visit Us</p>
+  <h2 class="section-title">영업시간</h2>
+  <table>
+    <tr><th>요일</th><th>시간</th></tr>
+    <tr><td>월요일 — 금요일</td><td>08:00 — 22:00</td></tr>
+    <tr><td>토요일</td><td>09:00 — 23:00</td></tr>
+    <tr><td>일요일</td><td>10:00 — 21:00</td></tr>
+    <tr><td>공휴일</td><td class="closed">휴무</td></tr>
+  </table>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="inner">
+    <div class="info">
+      <p class="section-label">Contact</p>
+      <h2 class="section-title">찾아오세요</h2>
+      <strong>주소</strong>서울특별시 마포구 연남동 123-45<br>연남로 1길 Brew &amp; Co. 빌딩 1F
+      <strong>전화</strong>02-1234-5678
+      <strong>이메일</strong>hello@brewandco.kr
+      <strong>인스타그램</strong>@brewandco.kr
+    </div>
+    <form onsubmit="alert('메시지가 전송되었습니다! 감사합니다 ☕'); return false;">
+      <input type="text"  placeholder="이름" required />
+      <input type="email" placeholder="이메일" required />
+      <textarea placeholder="문의 내용을 입력해주세요"></textarea>
+      <button type="submit">메시지 보내기</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>☕ <strong>Brew &amp; Co.</strong> — 커피 한 잔의 완벽한 여유</p>
+  <p>서울특별시 마포구 연남동 123-45 &nbsp;|&nbsp; 02-1234-5678 &nbsp;|&nbsp; <a href="mailto:hello@brewandco.kr">hello@brewandco.kr</a></p>
+  <p style="margin-top:.5rem;font-size:.8rem;opacity:.6">© 2026 Brew &amp; Co. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
